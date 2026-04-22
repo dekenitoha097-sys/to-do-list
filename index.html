@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestionnaire de Tâches</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div class="message-container">
+        <div id="error-message" class="error-message"></div>
+        <div id="success-message" class="success-message"></div>
+    </div>
+
+    <div class="home-container">
+        <h1 class="greeting-text" id="greetingText"></h1>
+        
+        <div class="button-group">
+            <button class="btn btn-success" id="addTaskBtn">Ajouter une tâche</button>
+            <button class="btn btn-danger" id="logOutBtn">Se déconnecter</button>
+        </div>
+
+        <div id="listOfTasks" class="list-of-tasks">
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+    <script>
+        const currentUser = getCurrentUser();
+        if (!currentUser) {
+            window.location.href = 'login.html';
+        }
+
+        const listOfTasks = document.getElementById('listOfTasks');
+        const greetingText = document.getElementById('greetingText');
+        const addTaskBtn = document.getElementById('addTaskBtn');
+        const logOutBtn = document.getElementById('logOutBtn');
+
+        greetingText.innerHTML = `Bienvenue <span>${currentUser.username}</span> sur votre gestionnaire de tâches`;
+
+        addTaskBtn.addEventListener('click', function() {
+            window.location.href = 'add-task.html';
+        });
+
+        logOutBtn.addEventListener('click', function() {
+            logoutUser();
+            window.location.href = 'login.html';
+        });
+
+        function displayTasks() {
+            const tasks = getUserTasks();
+            listOfTasks.innerHTML = '';
+
+            if (tasks.length === 0) {
+                listOfTasks.innerHTML = '<div class="no-tasks">Aucune tâche trouvée. Commencez par ajouter une !</div>';
+                return;
+            }
+
+            tasks.forEach(task => {
+                const taskDiv = document.createElement('div');
+                taskDiv.classList.add('task');
+
+                const titleEl = document.createElement('h3');
+                titleEl.textContent = task.titre;
+
+                const descEl = document.createElement('p');
+                descEl.textContent = task.description;
+
+                const buttonsDiv = document.createElement('div');
+                buttonsDiv.classList.add('task-buttons');
+
+                const editBtn = document.createElement('button');
+                editBtn.textContent = 'Modifier';
+                editBtn.classList.add('btn', 'btn-primary', 'btn-small');
+                editBtn.addEventListener('click', function() {
+                    window.location.href = 'edit-task.html?id=' + task.id;
+                });
+
+                const deleteBtn = document.createElement('button');
+                deleteBtn.textContent = 'Supprimer';
+                deleteBtn.classList.add('btn', 'btn-danger', 'btn-small');
+                deleteBtn.addEventListener('click', function() {
+                    if (confirm('Êtes-vous sûr de vouloir supprimer cette tâche ?')) {
+                        const result = deleteTask(task.id);
+                        if (result.success) {
+                            showSuccess(result.message, 'success-message');
+                            displayTasks();
+                        } else {
+                            showError(result.message, 'error-message');
+                        }
+                    }
+                });
+
+                buttonsDiv.appendChild(editBtn);
+                buttonsDiv.appendChild(deleteBtn);
+
+                taskDiv.appendChild(titleEl);
+                taskDiv.appendChild(descEl);
+                taskDiv.appendChild(buttonsDiv);
+
+                listOfTasks.appendChild(taskDiv);
+            });
+        }
+
+        displayTasks();
+    </script>
+
+</body>
+</html>

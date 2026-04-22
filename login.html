@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connexion</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="message-container">
+        <div id="error-message" class="error-message"></div>
+        <div id="success-message" class="success-message"></div>
+    </div>
+
+    <div class="login-container">
+        <h1 style="text-align: center; color: #333;">Connexion</h1>
+        <form id="loginForm" class="login-form">
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
+
+            <label for="password">Mot de passe:</label>
+            <input type="password" id="password" name="password" required>
+
+            <button type="submit" class="btn btn-primary">Connexion</button>
+            <a href="register.html" style="text-align: center;">Pas de compte ? Inscrivez-vous</a>
+        </form>
+    </div>
+
+    <script src="app.js"></script>
+    <script>
+        const loginForm = document.getElementById('loginForm');
+        loginForm.addEventListener('submit', function(event) {
+            event.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            const result = loginUser(email, password);
+            
+            if (result.success) {
+                showSuccess(result.message, 'success-message');
+                loginForm.reset();
+                setTimeout(() => {
+                    window.location.href = 'index.html';
+                }, 1500);
+            } else {
+                showError(result.message, 'error-message');
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inscription</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="message-container">
+        <div id="error-message" class="error-message"></div>
+        <div id="success-message" class="success-message"></div>
+    </div>
+
+    <div class="register-container">
+        <h1 style="text-align: center; color: #333;">Inscription</h1>
+        <form id="registerForm" class="register-form">
+            <label for="username">Nom d'utilisateur:</label>
+            <input type="text" id="username" name="username" required>
+
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
+
+            <label for="password">Mot de passe:</label>
+            <input type="password" id="password" name="password" required>
+
+            <button type="submit" class="btn btn-primary">Inscription</button>
+            <a href="login.html" style="text-align: center;">Vous avez un compte ? Connectez-vous</a>
+        </form>
+    </div>
+
+    <script src="app.js"></script>
+    <script>
+        const registerForm = document.getElementById('registerForm');
+        registerForm.addEventListener('submit', function(event) {
+            event.preventDefault();
+            const username = document.getElementById('username').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            const result = registerUser(username, email, password);
+            
+            if (result.success) {
+                showSuccess(result.message, 'success-message');
+                registerForm.reset();
+                setTimeout(() => {
+                    window.location.href = 'login.html';
+                }, 1500);
+            } else {
+                showError(result.message, 'error-message');
+            }
+        });
+    </script>
+</body>
+</html>

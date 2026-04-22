@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ajouter une tâche</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="message-container">
+        <div id="error-message" class="error-message"></div>
+        <div id="success-message" class="success-message"></div>
+    </div>
+
+    <div class="form-container">
+        <div class="back-button-container">
+            <a href="index.html">← Retour</a>
+        </div>
+
+        <h1 style="text-align: center; color: #333;">Ajouter une tâche</h1>
+        
+        <form id="addTaskForm">
+            <label for="titre">Titre:</label>
+            <input type="text" id="titre" name="titre" placeholder="Entrez le titre de la tâche" required>
+
+            <label for="description">Description:</label>
+            <textarea id="description" name="description" placeholder="Entrez la description de la tâche" required></textarea>
+
+            <button type="submit" class="btn btn-success">Ajouter la tâche</button>
+        </form>
+    </div>
+
+    <script src="app.js"></script>
+    <script>
+        const currentUser = getCurrentUser();
+        if (!currentUser) {
+            window.location.href = 'login.html';
+        }
+
+        const addTaskForm = document.getElementById('addTaskForm');
+
+        addTaskForm.addEventListener('submit', function(event) {
+            event.preventDefault();
+            
+            const titre = document.getElementById('titre').value;
+            const description = document.getElementById('description').value;
+
+            const result = addTask(titre, description);
+
+            if (result.success) {
+                showSuccess(result.message, 'success-message');
+                addTaskForm.reset();
+                setTimeout(() => {
+                    window.location.href = 'index.html';
+                }, 1500);
+            } else {
+                showError(result.message, 'error-message');
+            }
+        });
+    </script>
+</body>
+</html>
