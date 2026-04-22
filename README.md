@@ -91,5 +91,3 @@ Une application web simple et efficace pour organiser et gérer vos tâches quot
 - L'application ne nécessite pas de serveur ou de base de données externe
 
 ---
-
-Bon travail dans la gestion de vos tâches ! 🎉
